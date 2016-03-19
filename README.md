@@ -1,8 +1,8 @@
-# Get blog post's articles (JavaScript Promises example)
+# JavaScript Promises example
 
-*Start a spinner to indicate loading
-*Fetch some JSON for a story, which gives us the title, and urls for each chapter
-*Add title to the page
-*Fetch each chapter
-*Add the story to the page
-*Stop the spinner
+1. Start a spinner to indicate loading
+2. Fetch some JSON for a story, which gives us the title, and urls for each chapter
+3. Add title to the page
+4. Fetch each chapter
+5. Add the story to the page
+6. Stop the spinner
