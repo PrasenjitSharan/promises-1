@@ -48,13 +48,33 @@ function getChapter(i) {
 // }, function(error) {
 //   console.error('Failure! ' + error);
 // });
-
 getJSON('story.json').then(function(story) {
-  return getJSON(story.chapterUrls[0]);
-}).then(function(chapter1) {
-  addHtmlToPage(chapter1.html);
-}).catch(function() {
-  addTextToPage("Failed to show chapter");
+  addHtmlToPage(story.heading);
+
+  // Map our array of chapter urls to
+  // an array of chapter json promises.
+  // This makes sure they all download parallel.
+  return story.chapterUrls.map(getJSON)
+    .reduce(function(sequence, chapterPromise) {
+      // Use reduce to chain the promises together,
+      // adding content to the page for each chapter
+      return sequence.then(function() {
+        // Wait for everything in the sequence so far,
+        // then wait for this chapter to arrive.
+        return chapterPromise;
+      }).then(function(chapter) {
+        addHtmlToPage(chapter.html);
+      });
+    }, Promise.resolve());
+}).then(function() {
+  addTextToPage("All done");
+}).catch(function(err) {
+  // catch any error that happened along the way
+  addTextToPage("Argh, broken: " + err.message);
 }).then(function() {
   document.querySelector('.spinner').style.display = 'none';
 });
+
+function addTextToPage(text) {
+  console.log('Adding text to page: ' + text);
+}
